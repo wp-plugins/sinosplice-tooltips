@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== Sinosplice Tooltips ===
 Contributors: jpasden, techni_orchid
 Donate link: http://www.techni-orchid.com/extras/wp/sinosplicetooltips/
 Tags: plugin, popup, Chinese, pinyin, Sinosplice, tooltips

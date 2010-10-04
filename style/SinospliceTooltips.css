@@ -1,0 +1,9 @@
+.sinosplicetooltip {
+   border-bottom: 1px dotted #0af;
+   cursor: help;
+
+   /* optional effects--uncomment to activate them */
+   /* background-color: #ff9; */
+   /* font-weight: bold; */
+
+}

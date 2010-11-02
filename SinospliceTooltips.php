@@ -1,10 +1,10 @@
 <?php
-$VERSION = "1.0";
+$VERSION = "1.0.2";
 /*
-Plugin Name: Sinosplice Tooltips 1.0
+Plugin Name: Sinosplice Tooltips 1.0.2
 Plugin URI: http://www.techni-orchid.com/extras/wp/sinosplicetooltips/
 Description: Easily add attractive tooltips to show the pinyin of Chinese characters, glosses for Japanese characters, or any use for tooltip text you can think of.  Originally designed for and by Sinosplice.com.
-Version: 1.0
+Version: 1.0.2
 Author: Andy Warmack
 Author URI: http://www.techni-orchid.com/
 
@@ -275,7 +275,11 @@ EOT;
    <script type="text/javascript">
       var spanclass = '$sc';
       var originaltext = '$ot';
-      window.onload=function(){enableTooltips()};
+      eST = function(){enableSinospliceTooltips()};
+      if (window.addEventListener) // W3C standard
+         window.addEventListener('load',eST,false)
+      else if (window.attachEvent) // MSIE
+         window.attachEvent('onload',eST);
    </script>
 EOT;
    }

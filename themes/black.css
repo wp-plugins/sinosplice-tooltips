@@ -1,17 +1,18 @@
-.tooltip {
-   color: #fff;
-   font: lighter 1.75em Arial, sans-serif;
+.st_tooltip {
+   font-family: Arial, sans-serif;
+   font-size: 24pt;
    text-align: center;
    text-decoration: none;
    width: 250px;
 }
 
-.tooltip span.top {
+.st_tooltip span.top {
+   color: #fff;
    background: url(images/black.gif) no-repeat top;
    padding: 30px 8px 0;
 }
 
-.tooltip b.bottom {
+.st_tooltip b.bottom {
    color: #888;
    background: url(images/black.gif) no-repeat bottom;
    font: lighter 0.75em Arial, sans-serif;

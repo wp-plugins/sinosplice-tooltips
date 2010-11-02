@@ -1,4 +1,4 @@
-.sinosplicetooltip {
+.sinosplicetooltip, .tooltip, .info, .popup {
    border-bottom: 1px dotted #0af;
    cursor: help;
 

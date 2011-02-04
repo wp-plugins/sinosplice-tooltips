@@ -1,10 +1,10 @@
 <?php
-$VERSION = "1.0.2";
+$VERSION = "1.1";
 /*
-Plugin Name: Sinosplice Tooltips 1.0.2
+Plugin Name: Sinosplice Tooltips 1.1
 Plugin URI: http://www.techni-orchid.com/extras/wp/sinosplicetooltips/
 Description: Easily add attractive tooltips to show the pinyin of Chinese characters, glosses for Japanese characters, or any use for tooltip text you can think of.  Originally designed for and by Sinosplice.com.
-Version: 1.0.2
+Version: 1.1
 Author: Andy Warmack
 Author URI: http://www.techni-orchid.com/
 
@@ -21,6 +21,8 @@ Acknowledgements:
       http://rmnl.net/wp-addquicktag-plugin-for-adding-quicktags/
    Wladimir A. Jimenez B.
       http://www.kasbeel.cl/kas2008/kasplugins/wp-kastooltip/
+   Mark Wilbur
+      http://toshuo.com/
 */
 /**
  * Sinosplice Tooltips WordPress Plugin
@@ -59,32 +61,40 @@ $DIR = plugin_basename(dirname(__FILE__));
 $PLUGINURL = defined('WP_PLUGIN_URL') ? WP_PLUGIN_URL . '/' . $DIR :
              get_bloginfo('wpurl') . '/wp-content/plugins/' . $DIR;
 
-add_action('wp_head', 'wpst_wp_head'); // include headers 
-add_action('admin_menu', 'wpst_admin_menu');
+add_action('wp_head','wpst_wp_head'); // include headers 
+add_action('admin_menu','wpst_admin_menu');
+add_filter('plugin_action_links','wpst_plugin_action_links',10,2);
 
 //
 // Sinosplice stuff
 //
 
 $o = get_option('wpst_settings');
-if (!$o || ($o['version'] != $VERSION)) {
-   $o['theme'] = "white";
-   $o['spanclass'] = "sinosplicetooltip";
-   $o['originaltext'] = "yes";
-   $o['addquicktag'] = "yes";
-   $o['version'] = $VERSION;
-}
+if (!$o['theme'])          { $o['theme']          = "white";             }
+if (!$o['spanclass'])      { $o['spanclass']      = "sinosplicetooltip"; }
+if (!$o['originaltext'])   { $o['originaltext']   = "yes";               }
+if (!$o['addquicktag'])    { $o['addquicktag']    = "yes";               }
+if (!$o['toneconversion']) { $o['toneconversion'] = "yes1";              }
+$o['version'] = $VERSION;
 update_option('wpst_settings',$o);
 
 //
 // AddQuicktag stuff
 //
 
-function wpst_admin_menu(){
-   add_options_page('Sinosplice Tooltips', 'Sinosplice Tooltips', 9, basename(__FILE__), 'wpst_options_page');
+function wpst_admin_menu() {
+   add_options_page('Sinosplice Tooltips','Sinosplice Tooltips',9,basename(__FILE__),'wpst_options_page');
 }
 
-function wpst_options_page(){
+function wpst_plugin_action_links($links,$file) {
+   if ($file == plugin_basename(dirname(__FILE__).'/SinospliceTooltips.php')) {
+      $settings_link = '<a href="admin.php?page=SinospliceTooltips.php">Settings</a>';
+      return array_merge(array($settings_link),$links);
+   }
+   return $links;
+}
+
+function wpst_options_page() {
    global $VERSION;
 
    global $PLUGINURL;
@@ -109,6 +119,9 @@ function wpst_options_page(){
    $sc_popup = "";
    $ot_yes = "";
    $ot_no = "";
+   $tc_yes1 = "";
+   $tc_yes2 = "";
+   $tc_no = "";
    $aq_yes = "";
    $aq_no = "";
    if ($o['theme'] == "white")
@@ -139,6 +152,12 @@ function wpst_options_page(){
       $aq_no = "checked";
    else
       $aq_yes = "checked";
+   if ($o['toneconversion'] == "no")
+      $tc_no = "checked";
+   else if ($o['toneconversion'] == "yes2")
+      $tc_yes2 = "checked";
+   else
+      $tc_yes1 = "checked";
 
    $bubblesize = "width=\"50px\" height=\"50px\"";
    echo <<<EOT
@@ -183,20 +202,44 @@ function wpst_options_page(){
             Tooltip span tag class
             (don't change this unless you really need to;
             it could break things!):<br>
-            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[spanclass]" value="sinosplicetooltip" $sc_default>sinosplicetooltip (default)<br>
-            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[spanclass]" value="tooltip" $sc_tooltip>tooltip<br>
-            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[spanclass]" value="info" $sc_info>info<br>
-            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[spanclass]" value="popup" $sc_popup>popup<br><br>
+            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[spanclass]" value="sinosplicetooltip" $sc_default> sinosplicetooltip (default)<br>
+            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[spanclass]" value="tooltip" $sc_tooltip> tooltip<br>
+            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[spanclass]" value="info" $sc_info> info<br>
+            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[spanclass]" value="popup" $sc_popup> popup<br><br>
             Include original text in popup?<br>
-            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[originaltext]" value="yes" $ot_yes>Yes (default)<br>
-            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[originaltext]" value="no" $ot_no>No<br><br>
+            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[originaltext]" value="yes" $ot_yes> Yes (default)<br>
+            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[originaltext]" value="no" $ot_no> No<br><br>
             Add tooltip quicktag to blog post HTML editor?<br>
-            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[addquicktag]" value="yes" $aq_yes>Enable (default)<br>
-            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[addquicktag]" value="no" $aq_no>Disable<br>
+            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[addquicktag]" value="yes" $aq_yes> Enable (default)<br>
+            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[addquicktag]" value="no" $aq_no> Disable<br><br>
+            Automatically convert numerical pinyin to tone mark pinyin (e.g., convert "pin1yin1" to "pīnyīn")?<br>
+            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[toneconversion]" value="yes1" $tc_yes1> Yes, in HTML editor (default)<br>
+            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[toneconversion]" value="yes2" $tc_yes2> Yes, but only for public display to site visitors<br>
+            &nbsp;&nbsp;&nbsp; <input type="radio" name="wpst[toneconversion]" value="no" $tc_no> No<br>
          </fieldset>
          <p class="submit">
             <input type="submit" name="Submit" value="Save Changes &raquo;" />
          </p>
+         <div style="font-size: 8pt; font-style: italic; padding-left: 20px;">
+            &bull; Originally designed for and by
+               <a style="text-decoration: none;" target="_blank" href="http://www.sinosplice.com/">Sinosplice.com</a> and conceived by John Pasden.<br>
+            &bull; Authored by Andy Warmack at
+               <a style="text-decoration: none;" target="_blank" href="http://www.techni-orchid.com/">www.techni-orchid.com</a>, which also
+               <a style="text-decoration: none;" target="_blank" href="http://www.techni-orchid.com/extras/wp/sinosplicetooltips/">hosts this plugin</a>.<br>
+            &bull; Many thanks to
+               <a style="text-decoration: none;" target="_blank" href="http://toshuo.com/">Mark Wilbur</a>
+               for his tone conversion code, available at
+               <a style="text-decoration: none;" target="_blank" href="http://toshuo.com/">http://toshuo.com/</a><br>
+            &bull; We also acknowledge:<br>
+               <div style="padding-left: 20px;">
+                  Trent Richardson -
+                  <a style="text-decoration: none;" target="_blank" href="http://trentrichardson.com/examples/csstooltips/">http://trentrichardson.com/examples/csstooltips/</a><br>
+                  Roel Meurders -
+                  <a style="text-decoration: none;" target="_blank" href="http://rmnl.net/wp-addquicktag-plugin-for-adding-quicktags/">http://rmnl.net/wp-addquicktag-plugin-for-adding-quicktags/</a><br>
+                  Wladimir A. Jimenez B. -
+                  <a style="text-decoration: none;" target="_blank" href="http://www.kasbeel.cl/kas2008/kasplugins/wp-kastooltip/">http://www.kasbeel.cl/kas2008/kasplugins/wp-kastooltip/</a><br>
+               </div>
+         </div>
       </form>
    </div>
 EOT;
@@ -211,9 +254,17 @@ EOT;
          add_action('admin_footer', 'wpst_addquicktag');
 
       function wpst_addquicktag() {
+         global $PLUGINURL;
+
+         echo "<script type='text/javascript' src='" . $PLUGINURL . 
+              "/js/addtones.js'></script>\n";
          $o = get_option('wpst_settings');
          $spanclass = preg_replace('![\n\r]+!', "\\n", $o['spanclass']);
          $spanclass = str_replace("'", "\'", $spanclass);
+         if ($o['toneconversion'] == "yes1")
+            $tc_code = "\n                     pinyin = addtones(pinyin);";
+         else
+            $tc_code = "";
          echo <<<EOT
    <script type="text/javascript">
       <!--
@@ -235,7 +286,7 @@ EOT;
                if (edCanvas.selectionEnd > edCanvas.selectionStart) {
                   var pinyin =
                      prompt('Enter the pinyin.  键入拼音.','');
-                  if (pinyin) {
+                  if (pinyin) {{$tc_code}
                      var wpstNum = this.title;
                      edButtons[wpstNum].tagStart =
                         '<span class="{$spanclass}" ' +
@@ -250,6 +301,7 @@ EOT;
          }
       //-->
    </script>
+
 EOT;
       }
    }
@@ -268,13 +320,16 @@ EOT;
       $theme_url = $PLUGINURL . "/themes";
       $sc = $o['spanclass'];
       $ot = $o['originaltext'];
+      $tc = $o['toneconversion'];
       echo <<<EOT
    <link rel="stylesheet" type="text/css" href="$style_url/SinospliceTooltips.css" />
    <link rel="stylesheet" type="text/css" href="$theme_url/$theme.css" />
+   <script type="text/javascript" src="$js_url/addtones.js"></script>
    <script type="text/javascript" src="$js_url/SinospliceTooltips.js"></script>
    <script type="text/javascript">
       var spanclass = '$sc';
       var originaltext = '$ot';
+      var toneconversion = '$tc';
       eST = function(){enableSinospliceTooltips()};
       if (window.addEventListener) // W3C standard
          window.addEventListener('load',eST,false)

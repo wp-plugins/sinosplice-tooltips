@@ -36,6 +36,8 @@ function st_Prepare(el) {
    s.appendChild(document.createTextNode(l));
    st_tooltip.appendChild(s);
    b = st_CreateEl("b","bottom");
+   if (toneconversion == "yes2")
+      t = addtones(t);
    b.appendChild(document.createTextNode(t));
    st_tooltip.appendChild(b);
    st_setOpacity(st_tooltip);

@@ -1,6 +1,7 @@
 .st_tooltip {
    font-family: Arial, sans-serif;
    font-size: 24pt;
+   line-height: normal;
    text-align: center;
    text-decoration: none;
    width: 250px;

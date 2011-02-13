@@ -4,16 +4,16 @@ Donate link: http://www.techni-orchid.com/extras/wp/sinosplicetooltips/
 Tags: plugin, popup, Chinese, pinyin, Sinosplice, tooltips
 Requires at least: 2.0.0
 Tested up to: 3.0.4
-Stable tag: 1.1a
+Stable tag: 1.1.1
 
 Create attractive and customizable tooltips showing the pinyin of Chinese characters, glosses for Japanese characters, or anything you can think of.
 
 == Description ==
 
-Plugin Name: Sinosplice Tooltips 1.1a<br>
+Plugin Name: Sinosplice Tooltips 1.1.1<br>
 Plugin URI: http://www.techni-orchid.com/extras/wp/sinosplicetooltips/<br>
 Description: Easily add attractive tooltips to show the pinyin of Chinese characters, glosses for Japanese characters, or any use for tooltip text you can think of.  Originally designed for and by Sinosplice.com.<br>
-Version: 1.1a<br>
+Version: 1.1.1<br>
 Author: Andy Warmack<br>
 Author URI: http://www.techni-orchid.com/<br>
 
@@ -31,7 +31,7 @@ adapted to a variety of uses.
 
 == Changelog ==
 
-= 1.1a =
+= 1.1.1 =
 * Added missing file.
 
 = 1.1 =

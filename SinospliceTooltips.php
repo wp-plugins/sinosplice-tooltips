@@ -1,7 +1,7 @@
 <?php
 $VERSION = "1.1.1";
 /*
-Plugin Name: Sinosplice Tooltips 1.1.1
+Plugin Name: Sinosplice Tooltips
 Plugin URI: http://www.techni-orchid.com/extras/wp/sinosplicetooltips/
 Description: Easily add attractive tooltips to show the pinyin of Chinese characters, glosses for Japanese characters, or any use for tooltip text you can think of.  Originally designed for and by Sinosplice.com.
 Version: 1.1.1

@@ -1,10 +1,11 @@
 <?php
-$VERSION = "1.1.1";
+//echo "<br><br><br>";
+$VERSION = "1.2";
 /*
 Plugin Name: Sinosplice Tooltips
 Plugin URI: http://www.techni-orchid.com/extras/wp/sinosplicetooltips/
 Description: Easily add attractive tooltips to show the pinyin of Chinese characters, glosses for Japanese characters, or any use for tooltip text you can think of.  Originally designed for and by Sinosplice.com.
-Version: 1.1.1
+Version: 1.2
 Author: Andy Warmack
 Author URI: http://www.techni-orchid.com/
 
@@ -19,6 +20,8 @@ Acknowledgements:
       http://trentrichardson.com/examples/csstooltips/
    Roel Meurders
       http://rmnl.net/wp-addquicktag-plugin-for-adding-quicktags/
+   Frank Bültge
+      http://bueltge.de/wp-addquicktags-de-plugin/120/
    Wladimir A. Jimenez B.
       http://www.kasbeel.cl/kas2008/kasplugins/wp-kastooltip/
    Mark Wilbur
@@ -64,6 +67,7 @@ $PLUGINURL = defined('WP_PLUGIN_URL') ? WP_PLUGIN_URL . '/' . $DIR :
 add_action('wp_head','wpst_wp_head'); // include headers 
 add_action('admin_menu','wpst_admin_menu');
 add_filter('plugin_action_links','wpst_plugin_action_links',10,2);
+add_action('admin_enqueue_scripts','admin_enqueue_scripts');
 
 //
 // Sinosplice stuff
@@ -81,6 +85,17 @@ update_option('wpst_settings',$o);
 //
 // AddQuicktag stuff
 //
+
+function admin_enqueue_scripts() {
+   $legacy = '';
+   if (version_compare($GLOBALS['wp_version'],'3.3','<'))
+      $legacy = '.legacy';
+   wp_enqueue_script(
+      'PinyinButton',
+      plugins_url('/js/PinyinButton' . $legacy . '.js',__FILE__),
+      '','',TRUE
+   );
+}
 
 function wpst_admin_menu() {
    add_options_page('Sinosplice Tooltips','Sinosplice Tooltips',9,basename(__FILE__),'wpst_options_page');
@@ -236,6 +251,8 @@ function wpst_options_page() {
                   <a style="text-decoration: none;" target="_blank" href="http://trentrichardson.com/examples/csstooltips/">http://trentrichardson.com/examples/csstooltips/</a><br>
                   Roel Meurders -
                   <a style="text-decoration: none;" target="_blank" href="http://rmnl.net/wp-addquicktag-plugin-for-adding-quicktags/">http://rmnl.net/wp-addquicktag-plugin-for-adding-quicktags/</a><br>
+                  Frank Bültge -
+                  <a style="text-decoration: none;" target="_blank" href="http://bueltge.de/wp-addquicktags-de-plugin/120/">http://bueltge.de/wp-addquicktags-de-plugin/120/</a><br>
                   Wladimir A. Jimenez B. -
                   <a style="text-decoration: none;" target="_blank" href="http://www.kasbeel.cl/kas2008/kasplugins/wp-kastooltip/">http://www.kasbeel.cl/kas2008/kasplugins/wp-kastooltip/</a><br>
                </div>
@@ -267,39 +284,26 @@ EOT;
             $tc_code = "";
          echo <<<EOT
    <script type="text/javascript">
-      <!--
-         if (wpstToolbar = document.getElementById("ed_toolbar")) {
-            var wpstNum, wpstBtn;
-            wpstNum = edButtons.length;
-            edButtons[wpstNum] = new edButton('wpst_quicktag', wpstNum,
-               '<span class="{$spanclass}" title="pinyin">', '</span>', '');
-            var wpstBtn = wpstToolbar.lastChild;
-            while (wpstBtn.nodeType != 1) {
-               wpstBtn = wpstBtn.previousSibling;
+      function processPinyin() {
+         var selStart = edCanvas.selectionStart;
+         var selEnd = edCanvas.selectionEnd;
+         if (selEnd > selStart) {
+            var pinyin = prompt('Enter the pinyin.','');
+            if (pinyin) {{$tc_code}
+               var leftCanvas = edCanvas.value.substring(0,selStart);
+               var middleCanvas = edCanvas.value.substring(selStart,selEnd);
+               var rightCanvas = edCanvas.value.substring(selEnd,edCanvas.length);
+               edCanvas.value =
+                  leftCanvas + 
+                     '<span class="{$spanclass}"' + ' title="' + pinyin + '">' +
+                  middleCanvas + 
+                     '</span>' +
+                  rightCanvas;
             }
-            wpstBtn = wpstBtn.cloneNode(true);
-            wpstToolbar.appendChild(wpstBtn);
-            wpstBtn.id = 'wpst_quicktag';
-            wpstBtn.title = wpstNum;
-            wpstBtn.value = 'pinyin';
-            wpstBtn.onclick = function() {
-               if (edCanvas.selectionEnd > edCanvas.selectionStart) {
-                  var pinyin =
-                     prompt('Enter the pinyin.  键入拼音.','');
-                  if (pinyin) {{$tc_code}
-                     var wpstNum = this.title;
-                     edButtons[wpstNum].tagStart =
-                        '<span class="{$spanclass}" ' +
-                        'title="' + pinyin + '">';
-                     edInsertTag(edCanvas, parseInt(this.title));
-                  }
-               } else {
-                  alert('Please highlight some text first.');
-                  edCanvas.focus();
-               }
-            }
-         }
-      //-->
+         } else
+            alert('Please highlight some text first.');
+         edCanvas.focus();
+      }
    </script>
 
 EOT;

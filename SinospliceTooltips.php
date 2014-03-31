@@ -3,11 +3,11 @@
 $VERSION = "1.2";
 /*
 Plugin Name: Sinosplice Tooltips
-Plugin URI: http://www.techni-orchid.com/extras/wp/sinosplicetooltips/
+Plugin URI: http://www.techniorchidllc.com/extras/wp/sinosplicetooltips/
 Description: Easily add attractive tooltips to show the pinyin of Chinese characters, glosses for Japanese characters, or any use for tooltip text you can think of.  Originally designed for and by Sinosplice.com.
 Version: 1.2
 Author: Andy Warmack
-Author URI: http://www.techni-orchid.com/
+Author URI: http://www.techniorchidllc.com/
 
 Sinosplice Tooltips was conceived by John Pasden as a WordPress plugin
 replacement for the custom CSS and JavaScript code he had been using
@@ -42,7 +42,7 @@ Acknowledgements:
  *   URL: www.sinosplice.com
  *   Contact: john@sinosplice.com
  *   Authored by: Andy Warmack
- *   Author URL: www.techni-orchid.com
+ *   Author URL: www.techniorchidllc.com
  *
  *   This file is part of Sinosplice Tooltips.
  *
@@ -239,8 +239,8 @@ function wpst_options_page() {
             &bull; Originally designed for and by
                <a style="text-decoration: none;" target="_blank" href="http://www.sinosplice.com/">Sinosplice.com</a> and conceived by John Pasden.<br>
             &bull; Authored by Andy Warmack at
-               <a style="text-decoration: none;" target="_blank" href="http://www.techni-orchid.com/">www.techni-orchid.com</a>, which also
-               <a style="text-decoration: none;" target="_blank" href="http://www.techni-orchid.com/extras/wp/sinosplicetooltips/">hosts this plugin</a>.<br>
+               <a style="text-decoration: none;" target="_blank" href="http://www.techniorchidllc.com/">www.techniorchidllc.com</a>, which also
+               <a style="text-decoration: none;" target="_blank" href="http://www.techniorchidllc.com/extras/wp/sinosplicetooltips/">hosts this plugin</a>.<br>
             &bull; Many thanks to
                <a style="text-decoration: none;" target="_blank" href="http://toshuo.com/">Mark Wilbur</a>
                for his tone conversion code, available at

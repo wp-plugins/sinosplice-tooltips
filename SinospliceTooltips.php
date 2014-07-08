@@ -1,5 +1,4 @@
 <?php
-//echo "<br><br><br>";
 $VERSION = "1.2";
 /*
 Plugin Name: Sinosplice Tooltips
